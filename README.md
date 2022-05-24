@@ -29,3 +29,32 @@ In order to have wireless need to install / re-install islwifi. (note, non-free 
 sudo apt update && sudo apt install firmware-iwlwifi
 ```
 
+Then to set the wi-fi:
+```
+sudo ip link set wlp1s0 up
+```
+Add wifi to `/etc/network/interfaces`:
+```
+allow-hotplug wlp1s0
+iface wlp1s0 inet dhcp
+    wpa-ssid ESSID
+    wpa-psk PASSWORD
+```
+Then there are ways of bring up the interface, but simpler to just reboot.
+
+
+If an error "firmware: failed to load iwl-debug-yoyo.bin (-2)" is showing up at boot, create the follwing file:
+```
+sudo nano /etc/modprobe.d/iwlwifi.conf
+```
+And then enter the following content:
+```
+options iwlwifi enable_ini=N
+```
+After saving and exiting nano you will need to
+```
+sudo update-initramfs -u
+```
+This should disable those messages from appearing during startup.
+
+
